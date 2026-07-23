@@ -14,17 +14,12 @@ workflows:
           cp mobile/analysis_options.yaml meeting_app/
           cd meeting_app
           flutter pub get
-          # 修复 flutter_webrtc Java 编译 bug
           WEBRTC_FILE="$HOME/.pub-cache/hosted/pub.dev/flutter_webrtc-0.12.12+hotfix.1/android/src/main/java/com/cloudwebrtc/webrtc/SurfaceTextureRenderer.java"
           if [ -f "$WEBRTC_FILE" ]; then
             echo "Patching flutter_webrtc..."
-            # 1. 补上缺失的 onSurfaceCreated 方法
-            sed -i '' 's/new TextureRegistry.SurfaceProducer.Callback() {/new TextureRegistry.SurfaceProducer.Callback() { \
-                @Override \
-                public void onSurfaceCreated() {} \
-                @Override \
-                public void onSurfaceDestroyed() {} /' "$WEBRTC_FILE"
-            # 2. 删除文件里所有 @Override（避免"does not override"错误）
+            # 只加缺失的 onSurfaceCreated，不加 onSurfaceDestroyed（原本就有）
+            sed -i '' 's/new TextureRegistry.SurfaceProducer.Callback() {/& public void onSurfaceCreated() {} /' "$WEBRTC_FILE"
+            # 删掉所有 @Override 避免冲突
             sed -i '' '/@Override/d' "$WEBRTC_FILE"
             echo "Patch applied"
           fi
