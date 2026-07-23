@@ -5,6 +5,10 @@ workflows:
     environment:
       flutter: 3.24.0
     scripts:
+      - name: Setup Android project
+        script: |
+          cd android-source
+          flutter create --platforms=android .
       - name: Build APK
         script: |
           cd android-source
@@ -21,6 +25,10 @@ workflows:
       xcode: 16.0
       cocoapods: default
     scripts:
+      - name: Setup iOS project
+        script: |
+          cd ios-source
+          flutter create --platforms=ios .
       - name: Build iOS
         script: |
           cd ios-source
