@@ -18,8 +18,13 @@ workflows:
           WEBRTC_FILE="$HOME/.pub-cache/hosted/pub.dev/flutter_webrtc-0.12.12+hotfix.1/android/src/main/java/com/cloudwebrtc/webrtc/SurfaceTextureRenderer.java"
           if [ -f "$WEBRTC_FILE" ]; then
             echo "Patching flutter_webrtc..."
-            cp "$WEBRTC_FILE" "$WEBRTC_FILE.orig"
-            # 删除所有 @Override 行（暴力但有效）
+            # 1. 补上缺失的 onSurfaceCreated 方法
+            sed -i '' 's/new TextureRegistry.SurfaceProducer.Callback() {/new TextureRegistry.SurfaceProducer.Callback() { \
+                @Override \
+                public void onSurfaceCreated() {} \
+                @Override \
+                public void onSurfaceDestroyed() {} /' "$WEBRTC_FILE"
+            # 2. 删除文件里所有 @Override（避免"does not override"错误）
             sed -i '' '/@Override/d' "$WEBRTC_FILE"
             echo "Patch applied"
           fi
