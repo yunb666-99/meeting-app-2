@@ -1,32 +1,45 @@
 workflows:
   android-build:
     name: Android Build
-    max_build_duration: 30
+    max_build_duration: 60
     environment:
       flutter: 3.24.0
     scripts:
-      - name: Build APK
+      - name: Prepare and Build
         script: |
-          cd mobile
-          flutter create --platforms=android .
+          set -e
+          # 用 Flutter 创建一个全新的标准工程
+          flutter create --platforms=android --org com.meetingapp meeting_app
+          # 把我们的源代码覆盖进去
+          cp -r mobile/lib meeting_app/
+          cp mobile/pubspec.yaml meeting_app/
+          cp mobile/analysis_options.yaml meeting_app/
+          # 进入工程，安装依赖，构建
+          cd meeting_app
           flutter pub get
           flutter build apk --release
+          # APK 位置
+          echo "APK built at: $(pwd)/build/app/outputs/flutter-apk/app-release.apk"
     artifacts:
-      - mobile/build/app/outputs/flutter-apk/app-release.apk
+      - meeting_app/build/app/outputs/flutter-apk/app-release.apk
 
   ios-build:
     name: iOS Build
-    max_build_duration: 30
+    max_build_duration: 60
     environment:
       flutter: 3.24.0
       xcode: 16.0
       cocoapods: default
     scripts:
-      - name: Build iOS
+      - name: Prepare and Build
         script: |
-          cd mobile
-          flutter create --platforms=ios .
+          set -e
+          flutter create --platforms=ios --org com.meetingapp meeting_app
+          cp -r mobile/lib meeting_app/
+          cp mobile/pubspec.yaml meeting_app/
+          cp mobile/analysis_options.yaml meeting_app/
+          cd meeting_app
           flutter pub get
           flutter build ios --release --no-codesign
     artifacts:
-      - mobile/build/ios/iphoneos/Runner.app
+      - meeting_app/build/ios/iphoneos/Runner.app
