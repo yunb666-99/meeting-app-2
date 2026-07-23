@@ -13,10 +13,10 @@ workflows:
           cp mobile/pubspec.yaml meeting_app/
           cp mobile/analysis_options.yaml meeting_app/
           cd meeting_app
-          # 升级 Gradle 到 8.7 以兼容 Java 21
-          sed -i '' 's/gradle-7.6.3-all.zip/gradle-8.7-all.zip/' android/gradle/wrapper/gradle-wrapper.properties 2>/dev/null || sed -i 's/gradle-7.6.3-all.zip/gradle-8.7-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
-          # 更新 Android Gradle Plugin 版本
-          sed -i '' 's/com.android.tools.build:gradle:7.3.0/com.android.tools.build:gradle:8.3.0/' android/build.gradle 2>/dev/null || sed -i 's/com.android.tools.build:gradle:7.3.0/com.android.tools.build:gradle:8.3.0/' android/build.gradle
+          # 升级 Gradle 到 8.7
+          cd android
+          ./gradlew wrapper --gradle-version=8.7 2>/dev/null || true
+          cd ..
           flutter pub get
           flutter build apk --release
     artifacts:
