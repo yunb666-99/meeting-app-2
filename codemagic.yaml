@@ -5,17 +5,13 @@ workflows:
     environment:
       flutter: 3.24.0
     scripts:
-      - name: Setup Android project
-        script: |
-          cd android-source
-          flutter create --platforms=android .
       - name: Build APK
         script: |
-          cd android-source
+          cd mobile
           flutter pub get
           flutter build apk --release
     artifacts:
-      - android-source/build/app/outputs/flutter-apk/app-release.apk
+      - mobile/build/app/outputs/flutter-apk/app-release.apk
 
   ios-build:
     name: iOS Build
@@ -25,14 +21,10 @@ workflows:
       xcode: 16.0
       cocoapods: default
     scripts:
-      - name: Setup iOS project
-        script: |
-          cd ios-source
-          flutter create --platforms=ios .
       - name: Build iOS
         script: |
-          cd ios-source
+          cd mobile
           flutter pub get
           flutter build ios --release --no-codesign
     artifacts:
-      - ios-source/build/ios/iphoneos/Runner.app
+      - mobile/build/ios/iphoneos/Runner.app
