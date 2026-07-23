@@ -4,19 +4,20 @@ workflows:
     max_build_duration: 60
     environment:
       flutter: 3.24.0
+      vars:
+        JAVA_HOME: /Library/Java/JavaVirtualMachines/jdk-17.0.12.jdk/Contents/Home
     scripts:
       - name: Prepare and Build
         script: |
           set -e
+          # 试试用 Java 17
+          export JAVA_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null || echo $JAVA_HOME)
+          java -version 2>&1 || true
           flutter create --platforms=android --org com.meetingapp meeting_app
           cp -r mobile/lib meeting_app/
           cp mobile/pubspec.yaml meeting_app/
           cp mobile/analysis_options.yaml meeting_app/
           cd meeting_app
-          # 升级 Gradle 到 8.7
-          cd android
-          ./gradlew wrapper --gradle-version=8.7 2>/dev/null || true
-          cd ..
           flutter pub get
           flutter build apk --release
     artifacts:
