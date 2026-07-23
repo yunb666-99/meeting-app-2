@@ -5,26 +5,22 @@ workflows:
     environment:
       flutter: 3.24.0
     scripts:
-      - name: Setup Java and Build
+      - name: Build APK
         script: |
           set -e
-          # 列出可用的 Java 版本
-          /usr/libexec/java_home -V 2>&1 || true
-          # 尝试用 Java 17，找不到用默认
-          JAVA17=$(/usr/libexec/java_home -v 17 2>/dev/null || echo "")
-          if [ -n "$JAVA17" ]; then
-            export JAVA_HOME="$JAVA17"
-            echo "Using Java 17: $JAVA_HOME"
-          else
-            echo "Java 17 not found, using default"
-          fi
-          java -version 2>&1
           flutter create --platforms=android --org com.meetingapp meeting_app
           cp -r mobile/lib meeting_app/
           cp mobile/pubspec.yaml meeting_app/
           cp mobile/analysis_options.yaml meeting_app/
           cd meeting_app
           flutter pub get
+          # 修复 flutter_webrtc 的 Java 编译 bug
+          WEBRTC_DIR="$HOME/.pub-cache/hosted/pub.dev/flutter_webrtc-0.12.12+hotfix.1"
+          WEBRTC_FILE="$WEBRTC_DIR/android/src/main/java/com/cloudwebrtc/webrtc/SurfaceTextureRenderer.java"
+          if [ -f "$WEBRTC_FILE" ]; then
+            echo "Patching flutter_webrtc..."
+            sed -i.bak 's/new TextureRegistry.SurfaceProducer.Callback() {/new TextureRegistry.SurfaceProducer.Callback() { @Override public void onSurfaceCreated() {} /' "$WEBRTC_FILE"
+          fi
           flutter build apk --release
     artifacts:
       - meeting_app/build/app/outputs/flutter-apk/app-release.apk
