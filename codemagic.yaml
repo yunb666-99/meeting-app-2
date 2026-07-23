@@ -3,32 +3,20 @@ workflows:
     name: Android Build
     max_build_duration: 60
     environment:
-      flutter: 3.24.0
+      flutter: 3.27.0
     scripts:
-      - name: Build APK
+      - name: Build
         script: |
           set -e
           flutter create --platforms=android --org com.meetingapp meeting_app
           cp -r mobile/lib meeting_app/
           cp mobile/pubspec.yaml meeting_app/
-          cp mobile/analysis_options.yaml meeting_app/
           cd meeting_app
           flutter pub get
-          # 修复 flutter_webrtc
-          WEBRTC_FILE="$HOME/.pub-cache/hosted/pub.dev/flutter_webrtc-0.12.12+hotfix.1/android/src/main/java/com/cloudwebrtc/webrtc/SurfaceTextureRenderer.java"
-          if [ -f "$WEBRTC_FILE" ]; then
-            sed -i '' 's/new TextureRegistry.SurfaceProducer.Callback() {/& public void onSurfaceCreated() {} /' "$WEBRTC_FILE"
-            sed -i '' '/@Override/d' "$WEBRTC_FILE"
-          fi
-          # 查看并升级 Kotlin
-          echo "=== settings.gradle ==="
-          cat android/settings.gradle
-          echo "=== build.gradle ==="
-          cat android/build.gradle
-          # 用 perl 替换 Kotlin 版本（比 sed 更可靠）
-          perl -i -pe 's/(org\.jetbrains\.kotlin\.android[^"]*")\s*version\s*"[^"]*"/${1} version "2.0.0"/' android/settings.gradle 2>/dev/null || true
-          perl -i -pe 's/ext\.kotlin_version\s*=\s*".*"/ext.kotlin_version = "2.0.0"/' android/build.gradle 2>/dev/null || true
-          flutter build apk --release --verbose 2>&1 | tail -100
+          # 修复 flutter_webrtc Java bug
+          F="$HOME/.pub-cache/hosted/pub.dev/flutter_webrtc-0.12.12+hotfix.1/android/src/main/java/com/cloudwebrtc/webrtc/SurfaceTextureRenderer.java"
+          [ -f "$F" ] && sed -i '' 's/new TextureRegistry.SurfaceProducer.Callback() {/& public void onSurfaceCreated() {} /' "$F" && sed -i '' '/@Override/d' "$F"
+          flutter build apk --release
     artifacts:
       - meeting_app/build/app/outputs/flutter-apk/app-release.apk
 
@@ -36,11 +24,11 @@ workflows:
     name: iOS Build
     max_build_duration: 60
     environment:
-      flutter: 3.24.0
+      flutter: 3.27.0
       xcode: 16.0
       cocoapods: default
     scripts:
-      - name: Build iOS
+      - name: Build
         script: |
           set -e
           flutter create --platforms=ios --org com.meetingapp meeting_app
