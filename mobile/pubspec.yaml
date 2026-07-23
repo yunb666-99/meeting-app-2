@@ -1,46 +1,28 @@
-﻿name: meeting_app
-description: MeetingApp - 瑙嗛浼氳绯荤粺
-publish_to: 'none'
+name: meeting_app
+description: MeetingApp
+publish_to: none
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.2.0 <4.0.0'
-  flutter: '>=3.22.0'
+  sdk: ">=3.2.0 <4.0.0"
+  flutter: ">=3.22.0"
 
 dependencies:
   flutter:
     sdk: flutter
-
-  # UI
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.0.10
-
-  # 鐘舵€佺鐞?  flutter_riverpod: ^2.5.1
+  flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
-
-  # 璺敱
   go_router: ^14.2.0
-
-  # 缃戠粶璇锋眰
   dio: ^5.6.0
-
-  # 鏈湴瀛樺偍
   flutter_secure_storage: ^9.2.2
   shared_preferences: ^2.3.2
-
-  # LiveKit 瑙嗛浼氳
   livekit_client: ^2.5.0
-
-  # WebSocket (鑱婂ぉ)
   socket_io_client: ^2.0.3+1
-
-  # 鏉冮檺绠＄悊
   permission_handler: ^11.3.1
-
-  # JSON 搴忓垪鍖?  freezed_annotation: ^2.4.4
+  freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
-
-  # 宸ュ叿
   intl: ^0.19.0
   logger: ^2.4.0
 
@@ -55,8 +37,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
   assets:
     - assets/images/
     - assets/icons/
-  flutter_webrtc: 0.12.14
