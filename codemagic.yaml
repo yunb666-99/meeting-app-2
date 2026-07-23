@@ -8,6 +8,7 @@ workflows:
       - name: Build APK
         script: |
           cd mobile
+          flutter create --platforms=android .
           flutter pub get
           flutter build apk --release
     artifacts:
@@ -24,6 +25,7 @@ workflows:
       - name: Build iOS
         script: |
           cd mobile
+          flutter create --platforms=ios .
           flutter pub get
           flutter build ios --release --no-codesign
     artifacts:
