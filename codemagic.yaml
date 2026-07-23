@@ -20,10 +20,15 @@ workflows:
             sed -i '' 's/new TextureRegistry.SurfaceProducer.Callback() {/& public void onSurfaceCreated() {} /' "$WEBRTC_FILE"
             sed -i '' '/@Override/d' "$WEBRTC_FILE"
           fi
-          # 升级 Kotlin 版本
-          sed -i '' 's/kotlin_version = .*/kotlin_version = "2.0.0"/' android/build.gradle 2>/dev/null || true
-          sed -i '' 's/org.jetbrains.kotlin.android" version "[^"]*"/org.jetbrains.kotlin.android" version "2.0.0"/' android/settings.gradle 2>/dev/null || true
-          flutter build apk --release
+          # 查看并升级 Kotlin
+          echo "=== settings.gradle ==="
+          cat android/settings.gradle
+          echo "=== build.gradle ==="
+          cat android/build.gradle
+          # 用 perl 替换 Kotlin 版本（比 sed 更可靠）
+          perl -i -pe 's/(org\.jetbrains\.kotlin\.android[^"]*")\s*version\s*"[^"]*"/${1} version "2.0.0"/' android/settings.gradle 2>/dev/null || true
+          perl -i -pe 's/ext\.kotlin_version\s*=\s*".*"/ext.kotlin_version = "2.0.0"/' android/build.gradle 2>/dev/null || true
+          flutter build apk --release --verbose 2>&1 | tail -100
     artifacts:
       - meeting_app/build/app/outputs/flutter-apk/app-release.apk
 
@@ -41,7 +46,6 @@ workflows:
           flutter create --platforms=ios --org com.meetingapp meeting_app
           cp -r mobile/lib meeting_app/
           cp mobile/pubspec.yaml meeting_app/
-          cp mobile/analysis_options.yaml meeting_app/
           cd meeting_app
           flutter pub get
           flutter build ios --release --no-codesign
