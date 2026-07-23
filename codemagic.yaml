@@ -8,18 +8,17 @@ workflows:
       - name: Prepare and Build
         script: |
           set -e
-          # 用 Flutter 创建一个全新的标准工程
           flutter create --platforms=android --org com.meetingapp meeting_app
-          # 把我们的源代码覆盖进去
           cp -r mobile/lib meeting_app/
           cp mobile/pubspec.yaml meeting_app/
           cp mobile/analysis_options.yaml meeting_app/
-          # 进入工程，安装依赖，构建
           cd meeting_app
+          # 升级 Gradle 到 8.7 以兼容 Java 21
+          sed -i '' 's/gradle-7.6.3-all.zip/gradle-8.7-all.zip/' android/gradle/wrapper/gradle-wrapper.properties 2>/dev/null || sed -i 's/gradle-7.6.3-all.zip/gradle-8.7-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
+          # 更新 Android Gradle Plugin 版本
+          sed -i '' 's/com.android.tools.build:gradle:7.3.0/com.android.tools.build:gradle:8.3.0/' android/build.gradle 2>/dev/null || sed -i 's/com.android.tools.build:gradle:7.3.0/com.android.tools.build:gradle:8.3.0/' android/build.gradle
           flutter pub get
           flutter build apk --release
-          # APK 位置
-          echo "APK built at: $(pwd)/build/app/outputs/flutter-apk/app-release.apk"
     artifacts:
       - meeting_app/build/app/outputs/flutter-apk/app-release.apk
 
