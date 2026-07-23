@@ -13,9 +13,17 @@ workflows:
           cp mobile/pubspec.yaml meeting_app/
           cd meeting_app
           flutter pub get
-          # 修复 flutter_webrtc Java bug
-          F="$HOME/.pub-cache/hosted/pub.dev/flutter_webrtc-0.12.12+hotfix.1/android/src/main/java/com/cloudwebrtc/webrtc/SurfaceTextureRenderer.java"
-          [ -f "$F" ] && sed -i '' 's/new TextureRegistry.SurfaceProducer.Callback() {/& public void onSurfaceCreated() {} /' "$F" && sed -i '' '/@Override/d' "$F"
+          # 修复 flutter_webrtc Java bug（动态查找版本目录）
+          F=$(find "$HOME/.pub-cache/hosted/pub.dev" -maxdepth 1 -name "flutter_webrtc-*" -type d 2>/dev/null | head -1)
+          if [ -n "$F" ]; then
+            echo "Patching $F"
+            J="$F/android/src/main/java/com/cloudwebrtc/webrtc/SurfaceTextureRenderer.java"
+            if [ -f "$J" ]; then
+              sed -i '' 's/new TextureRegistry.SurfaceProducer.Callback() {/& public void onSurfaceCreated() {} public void onSurfaceDestroyed() {} /' "$J"
+              sed -i '' '/@Override/d' "$J"
+              echo "Patched"
+            fi
+          fi
           flutter build apk --release
     artifacts:
       - meeting_app/build/app/outputs/flutter-apk/app-release.apk
