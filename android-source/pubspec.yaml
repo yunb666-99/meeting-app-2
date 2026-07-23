@@ -1,10 +1,10 @@
-name: meeting_app
-description: MeetingApp - 视频会议系统
+﻿name: meeting_app
+description: MeetingApp - 瑙嗛浼氳绯荤粺
 publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.4.0 <4.0.0'
+  sdk: '>=3.2.0 <4.0.0'
   flutter: '>=3.22.0'
 
 dependencies:
@@ -15,41 +15,39 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.0.10
 
-  # 状态管理
-  flutter_riverpod: ^2.5.1
+  # 鐘舵€佺鐞?  flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
 
-  # 路由
+  # 璺敱
   go_router: ^14.2.0
 
-  # 网络请求
+  # 缃戠粶璇锋眰
   dio: ^5.6.0
 
-  # 本地存储
+  # 鏈湴瀛樺偍
   flutter_secure_storage: ^9.2.2
   shared_preferences: ^2.3.2
 
-  # LiveKit 视频会议
+  # LiveKit 瑙嗛浼氳
   livekit_client: ^2.3.3
 
-  # WebSocket (聊天)
+  # WebSocket (鑱婂ぉ)
   socket_io_client: ^2.0.3+1
 
-  # 权限管理
+  # 鏉冮檺绠＄悊
   permission_handler: ^11.3.1
 
-  # JSON 序列化
-  freezed_annotation: ^2.4.4
+  # JSON 搴忓垪鍖?  freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
 
-  # 工具
+  # 宸ュ叿
   intl: ^0.19.0
   logger: ^2.4.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^4.0.0
   build_runner: ^2.4.11
   freezed: ^2.5.7
   json_serializable: ^6.8.0
@@ -61,3 +59,4 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+
