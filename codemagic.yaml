@@ -14,15 +14,15 @@ workflows:
           cp mobile/analysis_options.yaml meeting_app/
           cd meeting_app
           flutter pub get
+          # 修复 flutter_webrtc
           WEBRTC_FILE="$HOME/.pub-cache/hosted/pub.dev/flutter_webrtc-0.12.12+hotfix.1/android/src/main/java/com/cloudwebrtc/webrtc/SurfaceTextureRenderer.java"
           if [ -f "$WEBRTC_FILE" ]; then
-            echo "Patching flutter_webrtc..."
-            # 只加缺失的 onSurfaceCreated，不加 onSurfaceDestroyed（原本就有）
             sed -i '' 's/new TextureRegistry.SurfaceProducer.Callback() {/& public void onSurfaceCreated() {} /' "$WEBRTC_FILE"
-            # 删掉所有 @Override 避免冲突
             sed -i '' '/@Override/d' "$WEBRTC_FILE"
-            echo "Patch applied"
           fi
+          # 升级 Kotlin 版本
+          sed -i '' 's/kotlin_version = .*/kotlin_version = "2.0.0"/' android/build.gradle 2>/dev/null || true
+          sed -i '' 's/org.jetbrains.kotlin.android" version "[^"]*"/org.jetbrains.kotlin.android" version "2.0.0"/' android/settings.gradle 2>/dev/null || true
           flutter build apk --release
     artifacts:
       - meeting_app/build/app/outputs/flutter-apk/app-release.apk
