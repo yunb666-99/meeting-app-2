@@ -157,9 +157,9 @@ class _MeetingScreenState extends ConsumerState<MeetingScreen>
                 Participant(
                   identity: identity,
                   name: rp.name ?? '未知用户',
-                  isCameraOn: rp.isCameraEnabled()(),
-                  isMicOn: rp.isMicrophoneEnabled()(),
-                  isScreenSharing: rp.isScreenShareEnabled()(),
+                  isCameraOn: rp.isCameraEnabled(),
+                  isMicOn: rp.isMicrophoneEnabled(),
+                  isScreenSharing: rp.isScreenShareEnabled(),
                 ),
               );
         }
@@ -190,9 +190,9 @@ class _MeetingScreenState extends ConsumerState<MeetingScreen>
                 Participant(
                   identity: identity,
                   name: p.name ?? '未知用户',
-                  isCameraOn: p.isCameraEnabled(),
-                  isMicOn: p.isMicrophoneEnabled(),
-                  isScreenSharing: p.isScreenShareEnabled(),
+                  isCameraOn: p.isCameraEnabled,
+                  isMicOn: p.isMicrophoneEnabled,
+                  isScreenSharing: p.isScreenShareEnabled,
                 ),
               );
         }
@@ -213,9 +213,9 @@ class _MeetingScreenState extends ConsumerState<MeetingScreen>
     if (identity.isEmpty) return;
     ref.read(meetingProvider.notifier).updateParticipant(
           identity,
-          isCameraOn: participant.isCameraEnabled(),
-          isMicOn: participant.isMicrophoneEnabled(),
-          isScreenSharing: participant.isScreenShareEnabled(),
+          isCameraOn: participant.isCameraEnabled,
+          isMicOn: participant.isMicrophoneEnabled,
+          isScreenSharing: participant.isScreenShareEnabled,
         );
   }
 
@@ -632,7 +632,7 @@ class _MeetingScreenState extends ConsumerState<MeetingScreen>
     if (room == null) {
       return const Center(
         child:
-            Icon(Icons.screen_share, color: Colors.white38, size: 48),
+            const Icon(Icons.screen_share, color: Colors.white38, size: 48),
       );
     }
 
@@ -644,7 +644,7 @@ class _MeetingScreenState extends ConsumerState<MeetingScreen>
         for (final pub in localParticipant.videoTrackPublications) {
           if (pub.isScreenShare && pub.track != null) {
             return lk.VideoTrackRenderer(
-              pub.track! as dynamic,
+              pub.track!,
               
             );
           }
@@ -656,7 +656,7 @@ class _MeetingScreenState extends ConsumerState<MeetingScreen>
           for (final pub in rp.videoTrackPublications) {
             if (pub.isScreenShare && pub.track != null) {
               return lk.VideoTrackRenderer(
-                pub.track! as dynamic,
+                pub.track!,
                 
               );
             }
@@ -669,18 +669,19 @@ class _MeetingScreenState extends ConsumerState<MeetingScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.screen_share,
+          const Icon(Icons.screen_share,
               color: Colors.white38, size: 48),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             '${participant.name} 正在共享屏幕',
-            style: TextStyle(color: Colors.white54),
+            style: const TextStyle(color: Colors.white54),
           ),
         ],
       ),
     );
   }
 }
+
 
 
 
