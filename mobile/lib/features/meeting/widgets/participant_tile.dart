@@ -148,7 +148,7 @@ class _ParticipantTileState extends State<ParticipantTile> {
     final p = widget.livekitParticipant;
 
     // 有可用的视频轨道
-    if (p != null && p.isCameraEnabled()) {
+    if (p != null && p.isCameraEnabled) {
       // 查找非屏幕共享的视频轨道
       final videoTracks = p.videoTrackPublications
           .where((pub) => !pub.isScreenShare && pub.track != null)
@@ -156,7 +156,7 @@ class _ParticipantTileState extends State<ParticipantTile> {
 
       if (videoTracks.isNotEmpty) {
         return lk.VideoTrackRenderer(
-          (videoTracks.first.track! as dynamic),
+          (videoTracks.first.track!),
           
         );
       }
@@ -198,5 +198,6 @@ class _ParticipantTileState extends State<ParticipantTile> {
     );
   }
 }
+
 
 
