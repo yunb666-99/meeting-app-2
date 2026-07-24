@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../../../core/constants.dart';
 import '../providers/meeting_provider.dart';
 
@@ -44,7 +44,7 @@ class ControlBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            // 麦克�?            _ControlButton(
+            // 麦克�?            _ControlButton(
               icon: isMicOn ? Icons.mic : Icons.mic_off,
               label: isMicOn ? '静音' : '取消静音',
               isActive: isMicOn,
@@ -55,9 +55,9 @@ class ControlBar extends StatelessWidget {
               onTap: onMicTap,
             ),
 
-            // 摄像�?            _ControlButton(
+            // 摄像�?            _ControlButton(
               icon: isCameraOn ? Icons.videocam : Icons.videocam_off,
-              label: isCameraOn ? '摄像�? : '摄像�?,
+              label: isCameraOn ? '摄像�? : '摄像�?,
               isActive: isCameraOn,
               backgroundColor: isCameraOn
                   ? const Color(0xFF3A3A55)
@@ -93,7 +93,7 @@ class ControlBar extends StatelessWidget {
               onTap: onChatTap,
             ),
 
-            // 主持人操作菜�?            if (isHost)
+            // 主持人操作菜�?            if (isHost)
               PopupMenuButton<String>(
                 offset: const Offset(0, -200),
                 color: const Color(0xFF2A2A40),
@@ -122,7 +122,7 @@ class ControlBar extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const PopupMenuDivider(height: 1),
+                    const PopupMenuDivider(height: 1, color: Color(AppColors.divider)),
                   ];
 
                   // 添加踢出参与者选项
@@ -152,7 +152,7 @@ class ControlBar extends StatelessWidget {
                   }
 
                   menuItems.addAll([
-                    const PopupMenuDivider(height: 1),
+                    const PopupMenuDivider(height: 1, color: Color(AppColors.divider)),
                     const PopupMenuItem(
                       value: 'end_meeting',
                       child: Row(
@@ -248,4 +248,5 @@ class _ControlButton extends StatelessWidget {
     );
   }
 }
+
 
