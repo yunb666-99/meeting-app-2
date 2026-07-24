@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -644,8 +644,8 @@ class _MeetingScreenState extends ConsumerState<MeetingScreen>
         for (final pub in localParticipant.videoTrackPublications) {
           if (pub.isScreenShare && pub.track != null) {
             return lk.VideoTrackRenderer(
-              pub.track!,
-              fit: RenderingFit.contain,
+              pub.track! as dynamic,
+              
             );
           }
         }
@@ -656,8 +656,8 @@ class _MeetingScreenState extends ConsumerState<MeetingScreen>
           for (final pub in rp.videoTrackPublications) {
             if (pub.isScreenShare && pub.track != null) {
               return lk.VideoTrackRenderer(
-                pub.track!,
-                fit: RenderingFit.contain,
+                pub.track! as dynamic,
+                
               );
             }
           }
@@ -681,4 +681,6 @@ class _MeetingScreenState extends ConsumerState<MeetingScreen>
     );
   }
 }
+
+
 
