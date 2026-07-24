@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:livekit_client/livekit_client.dart' as lk;
 import '../../../core/constants.dart';
 import '../providers/meeting_provider.dart';
@@ -39,9 +39,9 @@ class _ParticipantTileState extends State<ParticipantTile> {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              // 视频画面或占�?              _buildVideoView(),
+              // 视频画面或占�?              _buildVideoView(),
 
-              // 底部信息覆盖�?              Positioned(
+              // 底部信息覆盖�?              Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
@@ -60,7 +60,7 @@ class _ParticipantTileState extends State<ParticipantTile> {
                   ),
                   child: Row(
                     children: [
-                      // 麦克风状�?                      Icon(
+                      // 麦克风状�?                      Icon(
                         widget.participant.isMicOn
                             ? Icons.mic
                             : Icons.mic_off,
@@ -74,7 +74,7 @@ class _ParticipantTileState extends State<ParticipantTile> {
                       Expanded(
                         child: Text(
                           widget.participant.name +
-                              (widget.isLocal ? ' (�?' : ''),
+                              (widget.isLocal ? ' (�?' : ''),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
@@ -84,7 +84,7 @@ class _ParticipantTileState extends State<ParticipantTile> {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      // 主持人徽�?                      if (widget.participant.isHost)
+                      // 主持人徽�?                      if (widget.participant.isHost)
                         Container(
                           margin: const EdgeInsets.only(left: 4),
                           padding: const EdgeInsets.symmetric(
@@ -94,7 +94,7 @@ class _ParticipantTileState extends State<ParticipantTile> {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: const Text(
-                            '主持�?,
+                            '主持�?,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 9,
@@ -126,7 +126,7 @@ class _ParticipantTileState extends State<ParticipantTile> {
                             size: 12, color: Colors.white),
                         SizedBox(width: 2),
                         Text(
-                          '共享�?,
+                          '共享�?,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 9,
@@ -162,7 +162,7 @@ class _ParticipantTileState extends State<ParticipantTile> {
       }
     }
 
-    // 摄像头关闭时的占�?    return Container(
+    // 摄像头关闭时的占�?    return Container(
       color: const Color(0xFF3A3A55),
       child: Center(
         child: Column(
@@ -198,4 +198,5 @@ class _ParticipantTileState extends State<ParticipantTile> {
     );
   }
 }
+
 
