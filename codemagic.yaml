@@ -3,7 +3,7 @@ workflows:
     name: Android Build
     max_build_duration: 60
     environment:
-      flutter: 3.27.0
+      flutter: 3.22.0
     scripts:
       - name: Build
         script: |
@@ -12,17 +12,14 @@ workflows:
           cp -r mobile/lib meeting_app/
           cp mobile/pubspec.yaml meeting_app/
           cd meeting_app
+          # 升级 Kotlin
+          perl -i -pe 's/ext\.kotlin_version\s*=\s*"[^"]*"/ext.kotlin_version = "1.9.22"/' android/build.gradle 2>/dev/null || true
           flutter pub get
-          # 修复 flutter_webrtc Java bug（动态查找版本目录）
-          F=$(find "$HOME/.pub-cache/hosted/pub.dev" -maxdepth 1 -name "flutter_webrtc-*" -type d 2>/dev/null | head -1)
+          # 修复 flutter_webrtc Java bug
+          F=$(find "$HOME/.pub-cache/hosted/pub.dev" -maxdepth 1 -name "flutter_webrtc-*" -type d | head -1)
           if [ -n "$F" ]; then
-            echo "Patching $F"
             J="$F/android/src/main/java/com/cloudwebrtc/webrtc/SurfaceTextureRenderer.java"
-            if [ -f "$J" ]; then
-              sed -i '' 's/new TextureRegistry.SurfaceProducer.Callback() {/& public void onSurfaceCreated() {} public void onSurfaceDestroyed() {} /' "$J"
-              sed -i '' '/@Override/d' "$J"
-              echo "Patched"
-            fi
+            [ -f "$J" ] && sed -i '' 's/new TextureRegistry.SurfaceProducer.Callback() {/& public void onSurfaceCreated() {} public void onSurfaceDestroyed() {} /' "$J" && sed -i '' '/@Override/d' "$J"
           fi
           flutter build apk --release
     artifacts:
@@ -32,7 +29,7 @@ workflows:
     name: iOS Build
     max_build_duration: 60
     environment:
-      flutter: 3.27.0
+      flutter: 3.22.0
       xcode: 16.0
       cocoapods: default
     scripts:
